@@ -1,0 +1,24 @@
+1. Split array down to base case (length == 1)
+2. Merge split arrays in sorted order as linked lists:
+    Node split(arr, start, end)
+        Node first = split(arr, start, end / 2)
+        Node second = split(arr, end / 2 + 1, end)
+
+        return merge(first, second)
+
+    Node merge(Node x, Node y)
+        If (x == y)
+            return x.head
+        If (x != null && y != null)
+            If x > y
+                if x.prev != null
+                    insert y before x:
+                        x.prev -> y
+                        y -> x
+                    merge (x, y.next)
+            ElseIf x <= y
+                If y.next != null
+                    merge(x, y.next)
+                Else
+                    x.next -> y
+                    
