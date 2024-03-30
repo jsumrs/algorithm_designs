@@ -1,4 +1,7 @@
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Main {
 
@@ -10,23 +13,26 @@ public class Main {
         int size = startSize;
         boolean sorting = true;
         double[] array = makeArray(size);
-
+        StringBuilder log = new StringBuilder("Size,MS_Elapsed\n");
         while (sorting) {
             sorting = false;
-            System.out.println("Start sort of size: " + size);
+            System.out.println("---------------------------------" + "\nStart sort of size: " + size);
 
             long start = System.currentTimeMillis();
             InsertionSort.sort(array);
             long end = System.currentTimeMillis();
             long timespan = end - start;
 
-            if (timespan < 18000) { // Double input if it took less than 3 minutes to sort.
+            if (timespan < 18000 && checkSorted(array)) { // Double input if it took less than 3 minutes to sort.
+                log.append(size + "," + timespan + "\n");
                 System.out.println("Sort took: " + timespan + "ms. Doubling input...");
                 size *= 2;
                 sorting = true;
                 array = makeArray(size);
+
             }
         }
+        System.out.println(log);
     }
 
     /***
@@ -35,7 +41,7 @@ public class Main {
      * @return true if the list is sorted. false otherwise.
      */
     public static boolean checkSorted(double[] arr){
-        System.out.println("Checking array: " + Arrays.toString(arr));
+
         for (int i = 1; i < arr.length; i++){
             if (arr[i] < arr[i - 1]) {
                 System.err.println("Sort failed!");
@@ -46,27 +52,35 @@ public class Main {
     }
 
     /**
-     * Generates a random array of doubles which ranges from 0 to size, rounded to nearest hundredth.
+     * Generates a random array of doubles.
      * @param size Size of the array to generate.
      * @return Array of random doubles.
      */
     public static double[] makeArray(int size){
         double[] arr = new double[size];
-        
+        Random rand = new Random();
         for (int i = 0; i < arr.length; i++){
-            arr[i] = Math.round(((Math.random() * size) * 100)) / 100.0;
+            arr[i] = (rand.nextDouble());
         }
         return arr;
     }
 
+    static class MergeSort {
+        public static void sort(double[] arr)
+    }
+
     static class InsertionSort {
         public static void sort(double[] arr) {
+            /* Array is sorted if it has less than 2 items */
             if (arr.length < 2) {
                 return;
             }
+            /* Go through each element in the array */
             for (int i = 1; i < arr.length; i++){
+                /* If the item is less than the previous one, it is unsorted */
                 if (arr[i] < arr[i-1]) {
                     int j = i;
+                    /* Go backwards through the sorted portion and swap it back till it is in the correct position   */
                     while(j > 0 && arr[j] < arr[j - 1]) {
                         double temp = arr[j];
                         arr[j] = arr[j-1];
