@@ -13,19 +13,19 @@ public class Main {
         int size = startSize;
         boolean sorting = true;
         double[] array = makeArray(size);
-        StringBuilder log = new StringBuilder("Size,MS_Elapsed\n");
+        StringBuilder log = new StringBuilder("Size;MS_Elapsed\n");
         while (sorting) {
             sorting = false;
             System.out.println("---------------------------------" + "\nStart sort of size: " + size);
 
             long start = System.currentTimeMillis();
-            InsertionSort.sort(array);
+            LinkedMergeSort.sort(array);
             long end = System.currentTimeMillis();
             long timespan = end - start;
-
-            if (timespan < 18000 && checkSorted(array)) { // Double input if it took less than 3 minutes to sort.
-                log.append(size + "," + timespan + "\n");
-                System.out.println("Sort took: " + timespan + "ms. Doubling input...");
+            System.out.println("Sort took: " + timespan);
+            if (timespan < 90000 && checkSorted(array) && size < 200000000) { // Double input if it took less than 1.5 minutes to sort.
+                log.append(size + ";" + timespan + "\n");
+                System.out.print(" Doubling input...");
                 size *= 2;
                 sorting = true;
                 array = makeArray(size);
@@ -44,7 +44,7 @@ public class Main {
 
         for (int i = 1; i < arr.length; i++){
             if (arr[i] < arr[i - 1]) {
-                System.err.println("Sort failed!");
+                System.err.println("Not sorted!");
                 return false;
             }
         }
@@ -60,13 +60,48 @@ public class Main {
         double[] arr = new double[size];
         Random rand = new Random();
         for (int i = 0; i < arr.length; i++){
-            arr[i] = (rand.nextDouble());
+            arr[i] = Math.round((rand.nextDouble() * 100))/ 100.0;
         }
         return arr;
     }
 
+
+
     static class MergeSort {
-        public static void sort(double[] arr)
+        public static void sort(double[] arr) {
+
+            if (arr.length > 1){
+                double[] firstHalf = Arrays.copyOfRange(arr, 0, arr.length / 2);
+                double[] secondHalf = Arrays.copyOfRange(arr, arr.length / 2, arr.length);
+
+                sort(firstHalf);
+                sort(secondHalf);
+
+                merge(arr, firstHalf, secondHalf);
+            }
+        }
+
+        public static void merge(double[] out, double[] firstHalf, double[] secondHalf){
+            int f = 0;
+            int s = 0;
+            int i;
+            for (i = 0; i < out.length; i++){
+                if (f < firstHalf.length && s < secondHalf.length) {
+                    /* Check the both halves' indices and put the least of them into out[i] */
+                    out[i] = firstHalf[f] < secondHalf[s] ? firstHalf[f++] : secondHalf[s++];
+                } else {
+                    break;
+                }
+            }
+
+            /* Add the leftover items in the halves to the output */
+            while(f < firstHalf.length) {
+                out[i++] = firstHalf[f++];
+            }
+            while(s < secondHalf.length) {
+                out[i++] = secondHalf[s++];
+            }
+        }
     }
 
     static class InsertionSort {
@@ -90,8 +125,8 @@ public class Main {
                 }
             }
         }
-
     }
+
 
     /***
      * This class holds all the logic for a variation of mergesort that merges using a linked list.
@@ -124,9 +159,9 @@ public class Main {
                 return new Node(arr, start);
             }
             Node firstHalf = linkedSplit(arr, start, end / 2);
-            System.out.println("first half complete. " + "start: " + start + " end: " + end);
+            System.out.println("first half complete. " + "start: " + start + " end: " + end / 2);
             Node secondHalf = linkedSplit(arr, (end / 2) + 1, end);
-            System.out.println("second half complete. " + "start: " + start + " end: " + end);
+            System.out.println("second half complete. " + "start: " + (end / 2) + 1 + " end: " + end);
 
             return linkedMerge(firstHalf, secondHalf);
         }
