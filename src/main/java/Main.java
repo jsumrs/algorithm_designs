@@ -41,7 +41,7 @@ public class Main {
      * @return true if the list is sorted. false otherwise.
      */
     public static boolean checkSorted(double[] arr){
-
+        System.out.println(Arrays.toString(arr));
         for (int i = 1; i < arr.length; i++){
             if (arr[i] < arr[i - 1]) {
                 System.err.println("Not sorted!");
@@ -143,7 +143,7 @@ public class Main {
             for (int i = 0; i < arr.length; i++){
                 if (head != null) {
                     arr[i] = head.value;
-                    System.out.print(head + " ");
+
                     head = head.next;
                 }
             }
@@ -151,16 +151,14 @@ public class Main {
 
         public static Node linkedSplit(double[] arr, int start, int end) {
             System.out.println("start: " + start + " end: " + end);
-            if (end - start <= 0){
-                return null;
-            }
-            if (end - start == 1) {
+            if (end - start <= 1) {
                 System.out.println("if ");
                 return new Node(arr, start);
             }
-            Node firstHalf = linkedSplit(arr, start, end / 2);
+            int mid = start + (end-start) / 2;
+            Node firstHalf = linkedSplit(arr, start, mid);
             System.out.println("first half complete. " + "start: " + start + " end: " + end / 2);
-            Node secondHalf = linkedSplit(arr, (end / 2) + 1, end);
+            Node secondHalf = linkedSplit(arr, mid + 1, end);
             System.out.println("second half complete. " + "start: " + (end / 2) + 1 + " end: " + end);
 
             return linkedMerge(firstHalf, secondHalf);
