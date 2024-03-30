@@ -3,17 +3,56 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
-        int size = 100;
-        double[] array = makeArray(100);
-
-        System.out.println(Arrays.toString(array));
-        InsertionSort.sort(array);
-        System.out.println(Arrays.toString(array));
+        test(100);
     }
 
+    public static void test(int startSize){
+        int size = startSize;
+        boolean sorting = true;
+        double[] array = makeArray(size);
+
+        while (sorting) {
+            sorting = false;
+            System.out.println("Start sort of size: " + size);
+
+            long start = System.currentTimeMillis();
+            InsertionSort.sort(array);
+            long end = System.currentTimeMillis();
+            long timespan = end - start;
+
+            if (timespan < 18000) { // Double input if it took less than 3 minutes to sort.
+                System.out.println("Sort took: " + timespan + "ms. Doubling input...");
+                size *= 2;
+                sorting = true;
+                array = makeArray(size);
+            }
+        }
+    }
+
+    /***
+     * This method checks if an array is properly sorted in ascending order.
+     * @param arr The array to check.
+     * @return true if the list is sorted. false otherwise.
+     */
+    public static boolean checkSorted(double[] arr){
+        System.out.println("Checking array: " + Arrays.toString(arr));
+        for (int i = 1; i < arr.length; i++){
+            if (arr[i] < arr[i - 1]) {
+                System.err.println("Sort failed!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Generates a random array of doubles which ranges from 0 to size, rounded to nearest hundredth.
+     * @param size Size of the array to generate.
+     * @return Array of random doubles.
+     */
     public static double[] makeArray(int size){
         double[] arr = new double[size];
-
+        
         for (int i = 0; i < arr.length; i++){
             arr[i] = Math.round(((Math.random() * size) * 100)) / 100.0;
         }
@@ -25,8 +64,6 @@ public class Main {
             if (arr.length < 2) {
                 return;
             }
-
-            long start = System.nanoTime();
             for (int i = 1; i < arr.length; i++){
                 if (arr[i] < arr[i-1]) {
                     int j = i;
@@ -38,8 +75,6 @@ public class Main {
                     }
                 }
             }
-            long end = System.nanoTime();
-            System.out.println(end - start);
         }
 
     }
