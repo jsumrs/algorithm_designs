@@ -19,7 +19,7 @@ public class Main {
             System.out.println("---------------------------------" + "\nStart sort of size: " + size);
 
             long start = System.currentTimeMillis();
-            LinkedMergeSort.sort(array);
+            HeapSort.sort(array);
             long end = System.currentTimeMillis();
             long timespan = end - start;
             System.out.println("Sort took: " + timespan);
@@ -66,6 +66,72 @@ public class Main {
     }
 
 
+    static class HeapSort {
+        public static void sort(double[] arr) {
+            /* Base cases */
+            if (arr.length < 2) {
+                return;
+            } else if(arr.length == 3){
+                if(arr[0] > arr[1]){
+                    swap(arr, 0, 1);
+                }
+                if(arr[1] > arr[2]){
+                    swap(arr, 1, 2);
+                }
+            }
+
+            /* First arrange the array into a max-heap */
+            heapify(arr);
+
+            /* Sort portion */
+            int lastNode = arr.length - 1;
+            while (lastNode > 0){
+                // Swap the root to the last position, and decrement lastindex.
+                // This simulates us removing the root node.
+                swap(arr, lastNode--, 0);
+                int currentNode = 0;
+                int left = 1;
+                int right = 2;
+                while(arr[currentNode] < arr[left] && arr[currentNode] < arr[right]){
+                    /* Compare the children and swap the current node for its greatest child. */
+                    int best = arr[left] > arr[right] ? left : right;
+                    if (arr[best] > arr[currentNode]){
+                        swap(arr, best, currentNode);
+                        currentNode = best;
+                    }
+                }
+            }
+        }
+
+        private static void heapify(double[] arr) {
+            for (int currentNode = arr.length - 1; currentNode >= 0; currentNode--) {
+
+                int left = (currentNode * 2) + 1;
+                int right = (currentNode * 2) + 2;
+                /* Compare the children and swap the current node for its greatest child. */
+                if (left < arr.length && right < arr.length) {
+                    int best = arr[left] > arr[right] ? left : right;
+                    if (arr[best] > arr[currentNode]) {
+                        swap(arr, best, currentNode);
+                        currentNode = best;
+                    }
+                }
+            }
+            System.out.println(Arrays.toString(arr));
+        }
+
+        /***
+         * Swap index x with index y in the array.
+         * @param arr
+         * @param x
+         * @param y
+         */
+        private static void swap(double[] arr, int x, int y){
+            double temp = arr[x];
+            arr[x] = arr[y];
+            arr[y] = temp;
+        }
+    }
 
     static class MergeSort {
         public static void sort(double[] arr) {
