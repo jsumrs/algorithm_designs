@@ -90,8 +90,8 @@ public class Main {
                 // This simulates us removing the root node.
                 swap(arr, lastNode--, 0);
                 int currentNode = 0;
-                int left = 1;
-                int right = 2;
+                int left = (2 * currentNode) + 1;
+                int right = (2 * currentNode) + 2;
                 while(arr[currentNode] < arr[left] && arr[currentNode] < arr[right]){
                     /* Compare the children and swap the current node for its greatest child. */
                     int best = arr[left] > arr[right] ? left : right;
@@ -104,17 +104,27 @@ public class Main {
         }
 
         private static void heapify(double[] arr) {
-            for (int currentNode = arr.length - 1; currentNode >= 0; currentNode--) {
-
+            int currentNode = (arr.length - 1) / 2;
+            while (currentNode >= 0) {
                 int left = (currentNode * 2) + 1;
                 int right = (currentNode * 2) + 2;
+                int best = currentNode;
                 /* Compare the children and swap the current node for its greatest child. */
-                if (left < arr.length && right < arr.length) {
-                    int best = arr[left] > arr[right] ? left : right;
+
+                if (left < arr.length - 1) {
+                    if (right > arr.length - 1) {
+                        best = left;
+                    } else {
+                        best = arr[left] > arr[right] ? left : right;
+                    }
                     if (arr[best] > arr[currentNode]) {
                         swap(arr, best, currentNode);
                         currentNode = best;
+                    } else {
+                        currentNode--;
                     }
+                } else {
+                    currentNode--;
                 }
             }
             System.out.println(Arrays.toString(arr));
@@ -127,6 +137,7 @@ public class Main {
          * @param y
          */
         private static void swap(double[] arr, int x, int y){
+
             double temp = arr[x];
             arr[x] = arr[y];
             arr[y] = temp;
