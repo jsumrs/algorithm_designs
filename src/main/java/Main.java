@@ -6,7 +6,7 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
-        test(100);
+        test(1);
     }
 
     public static void test(int startSize){
@@ -41,7 +41,7 @@ public class Main {
      * @return true if the list is sorted. false otherwise.
      */
     public static boolean checkSorted(double[] arr){
-        System.out.println(Arrays.toString(arr));
+        //System.out.println(Arrays.toString(arr));
         for (int i = 1; i < arr.length; i++){
             if (arr[i] < arr[i - 1]) {
                 System.err.println("Not sorted!");
@@ -65,69 +65,72 @@ public class Main {
         return arr;
     }
 
-
+    /***
+     * This class uses an in-place heapsort to sort an array of doubles.
+     */
     static class HeapSort {
         public static void sort(double[] arr) {
-            /* Base cases */
-            if (arr.length < 2) {
+            if (arr.length < 2){
+                // Arrays shorter than 2 elements are sorted.
                 return;
-            } else if(arr.length == 3){
-                if(arr[0] > arr[1]){
-                    swap(arr, 0, 1);
-                }
-                if(arr[1] > arr[2]){
-                    swap(arr, 1, 2);
-                }
             }
 
             /* First arrange the array into a max-heap */
-            heapify(arr);
+            heapify(arr, (arr.length - 1) / 2, arr.length - 1);
 
-            /* Sort portion */
+            /* Sort the heap by removing the root node until the array is sorted.*/
             int lastNode = arr.length - 1;
-            while (lastNode > 0){
-                // Swap the root to the last position, and decrement lastindex.
-                // This simulates us removing the root node.
-                swap(arr, lastNode--, 0);
-                int currentNode = 0;
-                int left = (2 * currentNode) + 1;
-                int right = (2 * currentNode) + 2;
-                while(arr[currentNode] < arr[left] && arr[currentNode] < arr[right]){
-                    /* Compare the children and swap the current node for its greatest child. */
-                    int best = arr[left] > arr[right] ? left : right;
-                    if (arr[best] > arr[currentNode]){
-                        swap(arr, best, currentNode);
-                        currentNode = best;
-                    }
-                }
+            while (lastNode >= 0){
+
+                swap(arr, lastNode, 0);
+                lastNode--;
+                heapify(arr, 0, lastNode);
+
             }
         }
 
-        private static void heapify(double[] arr) {
-            int currentNode = (arr.length - 1) / 2;
+        /***
+         * Heapify the specified binary tree in an array-based heap.
+         * @param arr The array of the heap.
+         * @param startingNode The index of the startingNode node. Allows for heapifying a subtree in the heap.
+         * @param lastNode The index of the final leaf node in the heap.
+         */
+        private static void heapify(double[] arr, int startingNode, int lastNode) {
+
+            int currentNode = startingNode;
+            int prev;
+
+            /* Compare the children and swap the current node for its greatest child. */
             while (currentNode >= 0) {
                 int left = (currentNode * 2) + 1;
+                if (left > lastNode) {
+                    currentNode--;
+                    continue;
+                }
                 int right = (currentNode * 2) + 2;
-                int best = currentNode;
-                /* Compare the children and swap the current node for its greatest child. */
-
-                if (left < arr.length - 1) {
-                    if (right > arr.length - 1) {
+                int best;
+                prev = currentNode;
+                while ((left <= lastNode  && arr[left] > arr[currentNode])
+                        || (right <= lastNode && arr[right] > arr[currentNode])){
+                    /* Ensure that heaps below the swapped node remain valid. */
+                    if(right > lastNode || arr[left] > arr[right]){
                         best = left;
-                    } else {
-                        best = arr[left] > arr[right] ? left : right;
+                    } else{
+                        best = right;
                     }
-                    if (arr[best] > arr[currentNode]) {
+                    /* Swap the better child with its parent and push the parent down the heap. */
+                    if (best != currentNode && arr[best] > arr[currentNode]) {
                         swap(arr, best, currentNode);
                         currentNode = best;
-                    } else {
-                        currentNode--;
+                        left = (currentNode * 2) + 1;
+                        right = (currentNode * 2) + 2;
                     }
-                } else {
-                    currentNode--;
                 }
+                /* Return back to the previous highest node */
+                currentNode = prev;
+                currentNode--;
             }
-            System.out.println(Arrays.toString(arr));
+
         }
 
         /***
