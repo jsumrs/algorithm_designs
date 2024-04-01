@@ -65,7 +65,7 @@ public class Main {
     }
 
     /***
-     * This class uses an in-place heapsort to sort an array of doubles.
+     * This class can be used to heapsort arrays of doubles. Note that the heapsort is in-place so the space complexity is O(1).
      */
     static class HeapSort {
         public static void sort(double[] arr) {
@@ -146,10 +146,14 @@ public class Main {
         }
     }
 
+
+    /***
+     * This class can be used to merge sort arrays of doubles.
+     */
     static class MergeSort {
         public static void sort(double[] arr) {
-
             if (arr.length > 1){
+                /* Split the arrays till they reach the min size */
                 double[] firstHalf = Arrays.copyOfRange(arr, 0, arr.length / 2);
                 double[] secondHalf = Arrays.copyOfRange(arr, arr.length / 2, arr.length);
 
@@ -161,8 +165,8 @@ public class Main {
         }
 
         public static void merge(double[] out, double[] firstHalf, double[] secondHalf){
-            int f = 0;
-            int s = 0;
+            int f = 0; // index in the firstHalf.
+            int s = 0; // index in the secondHalf.
             int i;
             for (i = 0; i < out.length; i++){
                 if (f < firstHalf.length && s < secondHalf.length) {
@@ -183,6 +187,9 @@ public class Main {
         }
     }
 
+    /***
+     * This class can be used to insertion sort arrays of doubles.
+     */
     static class InsertionSort {
         public static void sort(double[] arr) {
             /* Array is sorted if it has less than 2 items */
@@ -206,6 +213,10 @@ public class Main {
         }
     }
 
+
+
+
+    /* ************************* ALL CODE BELOW THIS LINE CAN BE IGNORED, IT IS NOT WORKING CORRECTLY *********************************/
 
     /***
      * This class holds all the logic for a variation of mergesort that merges using a linked list.
