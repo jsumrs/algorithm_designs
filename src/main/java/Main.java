@@ -1,15 +1,20 @@
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
 
+
+
     public static void main(String[] args) {
-        test(100);
+        test(100, 200000000);
     }
 
-    public static void test(int startSize){
+    /**
+     * Driver method to test out the different sorting algorithms.
+     * @param startSize The starting size of the array to sort.
+     * @param maxSize The maximum size of the array to test. It is not recommended to exceed 200 million.
+     */
+    public static void test(int startSize, int maxSize){
         int size = startSize;
         boolean sorting = true;
         double[] array = makeArray(size);
@@ -19,10 +24,12 @@ public class Main {
             System.out.println("\n---------------------------------" + "\nStart sort of size: " + size);
 
             long start = System.currentTimeMillis();
-            MergeSort.sort(array);
+            //***************************************
+            MergeSort.sort(array); // Change this to switch to different sorts.
+            //***************************************
             long timespan = System.currentTimeMillis() - start;
             System.out.println("Sort took: " + timespan);
-            if (timespan < 90000 && checkSorted(array) && size < 200000000) { // Double input if it took less than 1.5 minutes to sort.
+            if (timespan < 90000 && checkSorted(array) && size < maxSize) { // Double input if it took less than 1.5 minutes to sort.
                 log.append(size).append(";").append(timespan).append("\n");
                 System.out.print(" Doubling input...");
                 size *= 2;
