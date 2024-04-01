@@ -6,7 +6,7 @@ import java.util.Random;
 public class Main {
 
     public static void main(String[] args) {
-        test(1);
+        test(100);
     }
 
     public static void test(int startSize){
@@ -16,15 +16,14 @@ public class Main {
         StringBuilder log = new StringBuilder("Size;MS_Elapsed\n");
         while (sorting) {
             sorting = false;
-            System.out.println("---------------------------------" + "\nStart sort of size: " + size);
+            System.out.println("\n---------------------------------" + "\nStart sort of size: " + size);
 
             long start = System.currentTimeMillis();
-            HeapSort.sort(array);
-            long end = System.currentTimeMillis();
-            long timespan = end - start;
+            MergeSort.sort(array);
+            long timespan = System.currentTimeMillis() - start;
             System.out.println("Sort took: " + timespan);
             if (timespan < 90000 && checkSorted(array) && size < 200000000) { // Double input if it took less than 1.5 minutes to sort.
-                log.append(size + ";" + timespan + "\n");
+                log.append(size).append(";").append(timespan).append("\n");
                 System.out.print(" Doubling input...");
                 size *= 2;
                 sorting = true;
